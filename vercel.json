@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "app/api/*": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/",
