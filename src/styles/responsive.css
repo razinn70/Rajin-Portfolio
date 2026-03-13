@@ -1,0 +1,98 @@
+/* Mobile-first breakpoints */
+
+/* --- Base (< 768px) --------------------------------- */
+.section-container {
+  padding: var(--space-16) var(--space-4);
+}
+
+.contact__socials {
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* Hide THREE.js canvas on small screens — show static fallback */
+@media (max-width: 767px) {
+  canvas {
+    display: none !important;
+  }
+
+  #hero-spacer {
+    height: 0;
+    display: none;
+  }
+
+  body {
+    min-height: auto;
+  }
+
+  /* Mobile hero — shown when canvas is hidden */
+  .mobile-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-8);
+    text-align: center;
+    background: var(--color-dark);
+  }
+
+  .mobile-hero__name {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .mobile-hero__tagline {
+    font-family: var(--font-terminal);
+    font-size: var(--text-sm);
+    color: var(--color-peach);
+    margin-bottom: var(--space-8);
+  }
+
+  .mobile-hero__cta {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Adjust main-content: no border-top needed */
+  #main-content {
+    border-top: none;
+  }
+}
+
+/* --- Tablet (768px – 1023px) ----------------------- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .section-container {
+    padding: var(--space-24) var(--space-8);
+  }
+
+  .mobile-hero {
+    display: none;
+  }
+}
+
+/* --- Desktop (≥ 1024px) ----------------------------- */
+@media (min-width: 1024px) {
+  .section-container {
+    padding: var(--space-24) var(--space-8);
+  }
+
+  .mobile-hero {
+    display: none;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Large Desktop (≥ 1440px) ----------------------- */
+@media (min-width: 1440px) {
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

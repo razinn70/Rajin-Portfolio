@@ -1,17 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rajin Al Faiz — Portfolio</title>
-    <meta http-equiv="refresh" content="0; url=./Res.html">
-    <link rel="canonical" href="./Res.html">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rajin Uddin — Full-Stack Developer</title>
+  <meta name="description" content="Rajin Uddin — CS Student & Full-Stack Developer at University of Guelph. Building production systems that ship measurable business impact." />
+  <meta name="author" content="Rajin Uddin" />
+  <link rel="canonical" href="https://rajinuddin.dev" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rajinuddin.dev" />
+  <meta property="og:title" content="Rajin Uddin — Full-Stack Developer" />
+  <meta property="og:description" content="CS Student & Full-Stack Developer at University of Guelph. Building production systems that ship measurable business impact." />
+  <meta property="og:image" content="https://rajinuddin.dev/og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://rajinuddin.dev" />
+  <meta name="twitter:title" content="Rajin Uddin — Full-Stack Developer" />
+  <meta name="twitter:description" content="CS Student & Full-Stack Developer at University of Guelph. Building production systems that ship measurable business impact." />
+  <meta name="twitter:image" content="https://rajinuddin.dev/og-image.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- JSON-LD Person Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Rajin Uddin",
+    "url": "https://rajinuddin.dev",
+    "email": "muddinal@uoguelph.ca",
+    "telephone": "+14378081738",
+    "jobTitle": "Full-Stack Developer",
+    "affiliation": {
+      "@type": "EducationalOrganization",
+      "name": "University of Guelph"
+    },
+    "sameAs": [
+      "https://github.com/razinn70",
+      "https://linkedin.com/in/rajinu"
+    ]
+  }
+  </script>
 </head>
 <body>
-    <script>
-        // Immediate redirect
-        window.location.replace('./Res.html');
-    </script>
-    <p>If you are not redirected automatically, <a href="./Res.html">click here</a>.</p>
+  <!-- THREE.js canvas appended by SceneManager -->
+  <!-- Loading screen appended by LoadingScreen -->
+  <!-- Navigation appended by Navigation -->
+
+  <!-- Scroll spacer: gives scroll range for camera zoom animation -->
+  <div id="hero-spacer" aria-hidden="true"></div>
+
+  <!-- HTML overlay sections in normal document flow -->
+  <main id="main-content">
+    <section id="projects" aria-label="Projects and Experience"></section>
+    <section id="about" aria-label="About Rajin"></section>
+    <section id="contact" aria-label="Contact"></section>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
