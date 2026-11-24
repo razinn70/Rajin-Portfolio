@@ -1,11 +1,13 @@
 import * as THREE from 'three'
 import type { Shell } from '@/terminal/Shell'
 
-const CANVAS_W = 512
-const CANVAS_H = 384
-const FONT_SIZE = 14
-const LINE_HEIGHT = 20
-const PADDING = 16
+// Rendered at 2x so text stays sharp when the camera fills the viewport with the screen.
+const CANVAS_W = 1024
+const CANVAS_H = 768
+const FONT_SIZE = 26
+const LINE_HEIGHT = 38
+const PADDING = 40
+const CURSOR_W = 14
 const MAX_LINES = Math.floor((CANVAS_H - PADDING * 2) / LINE_HEIGHT)
 
 const COLOR_BG = '#050f0a'
@@ -15,15 +17,17 @@ const COLOR_PROMPT = '#ffcba4'
 const COLOR_CURSOR = '#ffcba4'
 
 const BOOT_LINES = [
-  'BIOS 2.0 — rajinuddin.dev',
+  'RU-BIOS 2.0  rajin@portfolio',
   'Checking system................ OK',
   'Loading THREE.js scene......... OK',
   'Mounting virtual filesystem.... OK',
   'Starting terminal.............. OK',
   '',
-  'Type "help" to begin.',
+  'Ready.',
   '',
 ]
+
+const AUTOPLAY = ['whoami', 'ls']
 
 export class ScreenRenderer {
   readonly canvasTexture: THREE.CanvasTexture
@@ -38,6 +42,8 @@ export class ScreenRenderer {
   private bootLines: string[] = []
   private cursorVisible = true
   private lastCursorToggle = 0
+  private autoplayed = false
+  private charW = 0
 
   constructor(shell: Shell) {
     this.shell = shell
@@ -60,6 +66,7 @@ export class ScreenRenderer {
     window.addEventListener('crt-screen-visible', () => {
       this.screenVisible = true
       this.dirty = true
+      if (!this.autoplayed && this.bootDone) this.autoplay()
     })
 
     // Pre-load font then start boot sequence
@@ -72,6 +79,50 @@ export class ScreenRenderer {
     })
   }
 
+  /** Type a couple of commands by itself so the zoom ends on real content instead of an empty prompt. */
+  private autoplay(): void {
+    this.autoplayed = true
+    let c = 0
+    const typeNext = (): void => {
+      if (c >= AUTOPLAY.length) return
+      const cmd = AUTOPLAY[c]
+      let i = 0
+      const tick = (): void => {
+        i++
+        this.shell.setCurrentInput(cmd.slice(0, i))
+        if (i < cmd.length) {
+          window.setTimeout(tick, 70)
+        } else {
+          window.setTimeout(() => {
+            this.shell.execute(cmd)
+            c++
+            window.setTimeout(typeNext, 500)
+          }, 250)
+        }
+      }
+      tick()
+    }
+    typeNext()
+  }
+
+  /** Canvas text does not wrap on its own. Break long lines so nothing runs off the screen. */
+  private wrap(lines: string[]): string[] {
+    const max = Math.max(20, Math.floor((CANVAS_W - PADDING * 2) / (this.charW || FONT_SIZE * 0.6)))
+    const out: string[] = []
+    for (const line of lines) {
+      if (line.length <= max) { out.push(line); continue }
+      let rest = line
+      while (rest.length > max) {
+        let cut = rest.lastIndexOf(' ', max)
+        if (cut <= 0) cut = max
+        out.push(rest.slice(0, cut))
+        rest = '  ' + rest.slice(cut).trimStart()
+      }
+      out.push(rest)
+    }
+    return out
+  }
+
   private startBoot(): void {
     this.bootLines = []
 
@@ -79,6 +130,7 @@ export class ScreenRenderer {
       if (i >= BOOT_LINES.length) {
         this.bootDone = true
         this.dirty = true
+        if (this.screenVisible && !this.autoplayed) this.autoplay()
         return
       }
       this.bootLines.push(BOOT_LINES[i])
@@ -122,6 +174,7 @@ export class ScreenRenderer {
 
     ctx.font = `${FONT_SIZE}px "JetBrains Mono", monospace`
     ctx.textBaseline = 'top'
+    if (!this.charW) this.charW = ctx.measureText('M').width
 
     if (!this.bootDone) {
       this.drawBootLines()
@@ -145,16 +198,16 @@ export class ScreenRenderer {
     // Blinking cursor on last line if boot not done
     if (!this.bootDone && this.cursorVisible) {
       ctx.fillStyle = COLOR_CURSOR
-      ctx.fillRect(PADDING, y, 8, FONT_SIZE)
+      ctx.fillRect(PADDING, y, CURSOR_W, FONT_SIZE)
     }
   }
 
   private drawTerminal(): void {
     const ctx = this.ctx
-    const history = this.shell.getHistory()
+    const history = this.wrap(this.shell.getHistory())
 
-    // Show last MAX_LINES lines
-    const visible = history.slice(-MAX_LINES)
+    // Show the last lines that fit, leaving a row for the live prompt
+    const visible = history.slice(-(MAX_LINES - 1))
     let y = PADDING
 
     for (const line of visible) {
@@ -189,7 +242,7 @@ export class ScreenRenderer {
     if (this.cursorVisible) {
       const cursorX = PADDING + promptWidth + ctx.measureText(input).width
       ctx.fillStyle = COLOR_CURSOR
-      ctx.fillRect(cursorX, y, 8, FONT_SIZE)
+      ctx.fillRect(cursorX, y, CURSOR_W, FONT_SIZE)
     }
   }
 

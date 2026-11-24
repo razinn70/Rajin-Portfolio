@@ -34,3 +34,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# tsc output must never land next to sources (Vite would load it instead of .ts)
+src/**/*.js

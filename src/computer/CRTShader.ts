@@ -9,7 +9,7 @@ export function createCRTMaterial(texture: THREE.CanvasTexture): THREE.ShaderMat
     uniforms: {
       uTexture: { value: texture },
       uTime: { value: 0.0 },
-      uResolution: { value: new THREE.Vector2(512, 384) },
+      uResolution: { value: new THREE.Vector2(1024, 768) },
     },
   })
 }

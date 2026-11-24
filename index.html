@@ -3,63 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rajin Uddin — Full-Stack Developer</title>
-  <meta name="description" content="Rajin Uddin — CS Student & Full-Stack Developer at University of Guelph. Building production systems that ship measurable business impact." />
+  <title>Rajin Uddin | Software Developer, Guelph CS 2027</title>
+  <meta name="description" content="Rajin Uddin is a Guelph Computer Science student and Lead Software Developer at MapleKey Media. Open to Summer 2027 internships and 12 to 16 month terms." />
   <meta name="author" content="Rajin Uddin" />
-  <link rel="canonical" href="https://rajinuddin.dev" />
+  <meta name="theme-color" content="#0b0a09" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="canonical" href="https://rajin-portfolio.vercel.app/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://rajinuddin.dev" />
-  <meta property="og:title" content="Rajin Uddin — Full-Stack Developer" />
-  <meta property="og:description" content="CS Student & Full-Stack Developer at University of Guelph. Building production systems that ship measurable business impact." />
-  <meta property="og:image" content="https://rajinuddin.dev/og-image.png" />
-
-  <!-- Twitter Card -->
+  <!-- Open Graph: this is the card people see when your link is pasted into LinkedIn, Slack or email -->
+  <meta property="og:type" content="profile" />
+  <meta property="og:url" content="https://rajin-portfolio.vercel.app/" />
+  <meta property="og:title" content="Rajin Uddin | Software Developer" />
+  <meta property="og:description" content="Lead Software Developer at MapleKey Media. Guelph CS, graduating May 2027. Open to Summer 2027 internships." />
+  <meta property="og:image" content="https://rajin-portfolio.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Rajin Uddin, Software Developer. Guelph CS 2027." />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://rajinuddin.dev" />
-  <meta name="twitter:title" content="Rajin Uddin — Full-Stack Developer" />
-  <meta name="twitter:description" content="CS Student & Full-Stack Developer at University of Guelph. Building production systems that ship measurable business impact." />
-  <meta name="twitter:image" content="https://rajinuddin.dev/og-image.png" />
+  <meta name="twitter:title" content="Rajin Uddin | Software Developer" />
+  <meta name="twitter:description" content="Lead Software Developer at MapleKey Media. Guelph CS, graduating May 2027." />
+  <meta name="twitter:image" content="https://rajin-portfolio.vercel.app/og-image.png" />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <!-- JSON-LD Person Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Rajin Uddin",
-    "url": "https://rajinuddin.dev",
-    "email": "muddinal@uoguelph.ca",
-    "telephone": "+14378081738",
-    "jobTitle": "Full-Stack Developer",
-    "affiliation": {
-      "@type": "EducationalOrganization",
-      "name": "University of Guelph"
-    },
-    "sameAs": [
-      "https://github.com/razinn70",
-      "https://linkedin.com/in/rajinu"
-    ]
+    "url": "https://rajin-portfolio.vercel.app/",
+    "email": "mailto:muddinal@uoguelph.ca",
+    "jobTitle": "Lead Software Developer",
+    "worksFor": { "@type": "Organization", "name": "MapleKey Media" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Guelph" },
+    "knowsAbout": ["TypeScript", "React", "Python", "Java", "PostgreSQL", "Machine Learning"],
+    "sameAs": ["https://github.com/razinn70", "https://www.linkedin.com/in/rajinu"]
   }
   </script>
 </head>
 <body>
-  <!-- THREE.js canvas appended by SceneManager -->
-  <!-- Loading screen appended by LoadingScreen -->
-  <!-- Navigation appended by Navigation -->
+  <!-- Fallback for no-JS visitors and simple crawlers, so they still see who this is. -->
+  <noscript>
+    <div class="noscript">
+      <h1>Rajin Uddin, Software Developer</h1>
+      <p>Computer Science at the University of Guelph, graduating May 2027. Lead Software Developer at MapleKey Media.</p>
+      <p><a href="/resume/UddinRajinResume.pdf">Resume (PDF)</a> | <a href="mailto:muddinal@uoguelph.ca">muddinal@uoguelph.ca</a> | <a href="https://www.linkedin.com/in/rajinu">LinkedIn</a></p>
+    </div>
+  </noscript>
 
-  <!-- Scroll spacer: gives scroll range for camera zoom animation -->
-  <div id="hero-spacer" aria-hidden="true"></div>
+  <!-- Hero: tall section that gives the camera zoom its scroll range. Content is sticky inside it. -->
+  <section id="top" class="hero" aria-label="Introduction"></section>
 
-  <!-- HTML overlay sections in normal document flow -->
-  <main id="main-content">
-    <section id="projects" aria-label="Projects and Experience"></section>
-    <section id="about" aria-label="About Rajin"></section>
+  <main id="main-content" tabindex="-1">
+    <section id="experience" aria-label="Experience"></section>
+    <section id="projects" aria-label="Projects"></section>
+    <section id="about" aria-label="About"></section>
+    <section id="terminal" aria-label="Interactive terminal"></section>
     <section id="contact" aria-label="Contact"></section>
   </main>
 

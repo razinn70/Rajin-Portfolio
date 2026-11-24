@@ -1,105 +1,37 @@
 import { personal } from '@/data/personal'
 import { skills } from '@/data/skills'
+import { esc, revealOnScroll } from '@/utils/dom'
 
-const BIO_LINES = [
-  'I build things that work and look good doing it.',
-  '',
-  'From Dhaka to Guelph — 3rd-year CS student at the University of Guelph,',
-  'minor in Project Management, graduating May 2027.',
-  '',
-  'Right now I lead dev at MapleKey Media: sole developer on a full-stack',
-  'platform that replaced a manual intake process and ships 24-hour',
-  'turnaround at scale. Before that, 15+ web apps at PixelPro Analytics.',
-  '',
-  `Next: Summer 2026 internship at a company shipping software that matters.`,
+const BIO = [
+  'I grew up in Dhaka and came to Guelph for Computer Science, with a minor in Project Management. I graduate in May 2027.',
+  'Most of what I know came from shipping. At MapleKey Media I run engineering for a small agency: client sites, lead funnels, the intake platform, and an AI agent that finds new prospects. Clients judge the work by one thing, whether more people reach out, so I measure that.',
+  'The Project Management minor shows up in how I work. I ran Scrum for a 6 person team on JadeEd and I like owning a problem from the first conversation to the release.',
 ]
 
 export class AboutSection {
-  private container: HTMLElement
-
-  constructor(container: HTMLElement) {
-    this.container = container
-  }
+  constructor(private container: HTMLElement) {}
 
   mount(): void {
-    const skillsHTML = skills
-      .map(cat => `
-        <div class="skills-category">
-          <div class="skills-category__label">${cat.category}</div>
-          <div class="skills-category__tags">
-            ${cat.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
-          </div>
-        </div>
-      `)
-      .join('')
-
-    const bioHTML = BIO_LINES
-      .map(line => line === '' ? '<p>&nbsp;</p>' : `<p>${line}</p>`)
-      .join('')
+    const skillsHTML = skills.map(cat => `
+      <div class="skills__group">
+        <h3 class="skills__label">${esc(cat.category)}</h3>
+        <ul class="tags">${cat.skills.map(s => `<li class="tag">${esc(s)}</li>`).join('')}</ul>
+      </div>`).join('')
 
     this.container.innerHTML = `
-      <div class="section-container">
-        <p class="section-title">about</p>
-        <div class="mac-window reveal">
-          <div class="mac-titlebar">
-            <div class="mac-buttons">
-              <span class="mac-btn mac-btn--close" aria-hidden="true"></span>
-              <span class="mac-btn mac-btn--min"   aria-hidden="true"></span>
-              <span class="mac-btn mac-btn--max"   aria-hidden="true"></span>
-            </div>
-            <span class="mac-title">about.md — ${personal.name}</span>
+      <div class="section-container about">
+        <header class="section-head">
+          <p class="section-eyebrow">03 / about</p>
+          <h2 class="section-title">The person behind the commits</h2>
+        </header>
+        <div class="about__grid">
+          <div class="about__bio reveal">
+            ${BIO.map(p => `<p>${esc(p)}</p>`).join('')}
+            <p class="about__next"><strong>Next:</strong> ${esc(personal.availability)}.</p>
           </div>
-          <div class="mac-body">
-            <div class="mac-prompt">
-              <span class="mac-prompt__symbol">$</span>
-              <span class="mac-prompt__cmd">cat ~/about.md</span>
-            </div>
-            <div class="mac-output" id="about-bio">
-              ${bioHTML}
-            </div>
-            <div class="skills-grid">
-              ${skillsHTML}
-            </div>
-          </div>
+          <div class="skills reveal" aria-label="Technical skills">${skillsHTML}</div>
         </div>
-      </div>
-    `
-
-    this.setupReveal()
-    this.setupTypingEffect()
-  }
-
-  private setupTypingEffect(): void {
-    const bioEl = this.container.querySelector<HTMLElement>('#about-bio')
-    if (!bioEl) return
-
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) {
-          bioEl.style.opacity = '0'
-          setTimeout(() => {
-            bioEl.style.transition = 'opacity 0.8s ease'
-            bioEl.style.opacity = '1'
-          }, 200)
-          obs.unobserve(e.target)
-        }
-      }),
-      { threshold: 0.3 }
-    )
-    obs.observe(bioEl)
-  }
-
-  private setupReveal(): void {
-    const revealEls = this.container.querySelectorAll<HTMLElement>('.reveal')
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('is-visible')
-          obs.unobserve(e.target)
-        }
-      }),
-      { threshold: 0.1 }
-    )
-    revealEls.forEach(el => obs.observe(el))
+      </div>`
+    revealOnScroll(this.container)
   }
 }

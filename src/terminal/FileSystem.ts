@@ -81,7 +81,8 @@ export class FileSystem {
   }
 
   private currentDir(): FSDir | null {
-    return this.resolveDir(this.currentPath.join('/'))
+    // Must be absolute. A relative join appended the current path to itself, so plain `ls` and Tab completion always came back empty.
+    return this.resolveDir('/' + this.currentPath.join('/'))
   }
 
   private resolveDir(path: string): FSDir | null {

@@ -8,7 +8,7 @@ export class Shell extends EventTarget {
   private hist: History
   private outputHistory: string[] = []
   private currentInput = ''
-  readonly PROMPT_PREFIX = 'rajin@rajinuddin.dev:'
+  readonly PROMPT_PREFIX = 'rajin@portfolio:'
 
   constructor() {
     super()

@@ -1,34 +1,26 @@
-// --- Styles (must be first) ---
+// --- Fonts (self hosted, so the strict CSP can stay strict) ---
+import '@fontsource/inter/latin-400.css'
+import '@fontsource/inter/latin-500.css'
+import '@fontsource/inter/latin-600.css'
+import '@fontsource/inter/latin-700.css'
+import '@fontsource/jetbrains-mono/latin-400.css'
+import '@fontsource/jetbrains-mono/latin-500.css'
+
+// --- Styles ---
 import '@/styles/global.css'
-import '@/styles/animations.css'
 import '@/styles/navigation.css'
-import '@/styles/projects.css'
-import '@/styles/about.css'
-import '@/styles/contact.css'
-import '@/styles/responsive.css'
+import '@/styles/hero.css'
+import '@/styles/sections.css'
 
-// --- Scene ---
-import { SceneManager } from '@/scene/SceneManager'
-import { CameraController } from '@/scene/CameraController'
-import { ResponsiveHandler } from '@/scene/ResponsiveHandler'
+import { inject } from '@vercel/analytics'
 
-// --- Computer ---
-import { ComputerModel } from '@/computer/ComputerModel'
-import { ScreenRenderer } from '@/computer/ScreenRenderer'
-
-// --- Terminal ---
-import { Shell } from '@/terminal/Shell'
-
-// --- UI ---
-import { LoadingScreen } from '@/ui/LoadingScreen'
-import { Cursor } from '@/ui/Cursor'
 import { Navigation } from '@/ui/Navigation'
+import { Hero } from '@/ui/Hero'
+import { ExperienceSection } from '@/ui/ExperienceSection'
 import { ProjectCards } from '@/ui/ProjectCards'
 import { AboutSection } from '@/ui/AboutSection'
+import { TerminalSection } from '@/ui/TerminalSection'
 import { ContactSection } from '@/ui/ContactSection'
-
-// --- Personal ---
-import { personal } from '@/data/personal'
 
 function hasWebGL(): boolean {
   try {
@@ -39,89 +31,85 @@ function hasWebGL(): boolean {
   }
 }
 
-function mountMobileHero(): void {
-  const hero = document.createElement('div')
-  hero.className = 'mobile-hero'
-  hero.innerHTML = `
-    <h1 class="mobile-hero__name">${personal.name}</h1>
-    <p class="mobile-hero__tagline">${personal.tagline}</p>
-    <div class="mobile-hero__cta">
-      <a href="#projects" class="btn-primary">See My Work</a>
-      <a href="${personal.resumePath}" download class="btn-primary">Resume</a>
-    </div>
-  `
-  const main = document.getElementById('main-content')
-  main?.prepend(hero)
+/** 3D is a bonus layer. Skip it on phones and tablets, without WebGL, or when the visitor asked for less data or motion. */
+function shouldRun3D(): boolean {
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+  return (
+    window.matchMedia('(min-width: 1024px) and (min-height: 600px)').matches &&
+    !conn?.saveData &&
+    hasWebGL()
+  )
 }
 
-async function init(): Promise<void> {
-  // 1. Loading screen (shown immediately)
-  const loading = new LoadingScreen()
-  loading.show()
+function byId(id: string): HTMLElement | null {
+  return document.getElementById(id)
+}
 
-  // 2. Cursor
-  const cursor = new Cursor()
-  cursor.mount()
+async function start3D(heroEl: HTMLElement, hero: Hero): Promise<void> {
+  // Three.js is ~115 KB gzipped. Load it after the page content is already readable.
+  const [{ SceneManager }, { CameraController }, { ResponsiveHandler }, { ComputerModel }, { ScreenRenderer }, { Shell }] =
+    await Promise.all([
+      import('@/scene/SceneManager'),
+      import('@/scene/CameraController'),
+      import('@/scene/ResponsiveHandler'),
+      import('@/computer/ComputerModel'),
+      import('@/computer/ScreenRenderer'),
+      import('@/terminal/Shell'),
+    ])
 
-  // 3. Navigation
-  const nav = new Navigation()
-  nav.mount()
-
-  // 4. Wire UI sections (content sections below the hero)
-  const projectsEl = document.getElementById('projects')
-  const aboutEl = document.getElementById('about')
-  const contactEl = document.getElementById('contact')
-
-  if (projectsEl) new ProjectCards(projectsEl).mount()
-  if (aboutEl)    new AboutSection(aboutEl).mount()
-  if (contactEl)  new ContactSection(contactEl).mount()
-
-  // 5. WebGL check — skip 3D on unsupported browsers
-  if (!hasWebGL()) {
-    mountMobileHero()
-    await loading.hide()
-    return
-  }
-
-  // 6. THREE.js scene
   const sceneManager = new SceneManager()
   const computer = new ComputerModel(sceneManager.scene)
   sceneManager.scene.add(computer.group)
 
-  // 7. Terminal shell + screen renderer
-  const shell = new Shell()
-  const screenRenderer = new ScreenRenderer(shell)
+  const screen = new ScreenRenderer(new Shell())
+  computer.attachCRTMaterial(screen.canvasTexture)
 
-  // Attach CRT material to the screen plane once texture is ready
-  computer.attachCRTMaterial(screenRenderer.canvasTexture)
-
-  // 8. Keyboard input: route to shell when terminal is active
-  let terminalActive = false
-  window.addEventListener('crt-screen-visible', () => {
-    terminalActive = true
-  })
-
-  document.addEventListener('keydown', e => {
-    if (!terminalActive) return
-    shell.handleKeydown(e)
-  })
-
-  // 9. Camera controller + responsive handler
-  const cameraController = new CameraController(sceneManager.camera)
+  const camera = new CameraController(sceneManager.camera, computer.group, heroEl, t => hero.setProgress(t))
   new ResponsiveHandler(sceneManager.renderer, sceneManager.camera)
 
-  // 10. Start render loop
-  sceneManager.start((delta, elapsed) => {
-    void delta
-    cameraController.update()
-    screenRenderer.update(elapsed * 1000)
+  const syncPause = (): void => sceneManager.setPaused(window.scrollY > heroEl.offsetHeight + 40)
+  window.addEventListener('scroll', syncPause, { passive: true })
+  syncPause()
+
+  sceneManager.start((_delta, elapsed) => {
+    camera.update()
+    screen.update(elapsed * 1000)
     computer.updateShaderTime(elapsed)
   })
-
-  // 11. Hide loading screen after a short delay
-  setTimeout(async () => {
-    await loading.hide()
-  }, 1800)
 }
 
-init().catch(console.error)
+function init(): void {
+  new Navigation().mount()
+
+  const heroEl = byId('top')
+  const hero = heroEl ? new Hero(heroEl) : null
+  hero?.mount()
+
+  const sections: [string, new (el: HTMLElement) => { mount(): void }][] = [
+    ['experience', ExperienceSection],
+    ['projects', ProjectCards],
+    ['about', AboutSection],
+    ['terminal', TerminalSection],
+    ['contact', ContactSection],
+  ]
+  sections.forEach(([id, Ctor]) => {
+    const el = byId(id)
+    if (el) new Ctor(el).mount()
+  })
+
+  if (heroEl && hero && shouldRun3D()) {
+    document.documentElement.classList.add('has-3d')
+    start3D(heroEl, hero).catch(err => {
+      console.error('3D scene failed, continuing without it', err)
+      document.documentElement.classList.remove('has-3d')
+      document.documentElement.classList.add('no-3d')
+    })
+  } else {
+    document.documentElement.classList.add('no-3d')
+  }
+
+  // Privacy friendly page view analytics. Turn on "Web Analytics" for this project in the Vercel dashboard.
+  inject()
+}
+
+init()

@@ -1,49 +1,35 @@
-# Rajin Al Faiz - Portfolio
+# Rajin Uddin, portfolio
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/portfolio)
+Personal site: **https://rajin-portfolio.vercel.app**
 
-## 🚀 Live Portfolio
-Professional portfolio showcasing software development projects, academic achievements, and technical expertise.
+A recruiter friendly portfolio with a scroll driven 3D retro computer and a working terminal you can type into.
 
-### Features
-- **Responsive Design**: Mobile-first approach with seamless cross-device experience
-- **Interactive Terminal**: Custom terminal interface for unique user engagement
-- **Skills Visualization**: Animated progress bars and skill categorization
-- **GitHub Integration**: Real-time project data from GitHub API
-- **Case Studies**: Detailed technical problem-solving documentation
-- **ATS Optimized**: Keyword-rich content for recruiter discovery
+## What is in here
+- **Hero, experience, projects, about, contact** rendered from typed data in `src/data/`
+- **3D scene** (Three.js): a CRT computer that the camera zooms into as you scroll. It boots and types `whoami` on its own. Loaded lazily and only on desktop, so phones get a fast, plain page.
+- **Terminal section**: a real, accessible shell with a virtual file system (`ls`, `cd`, `cat`, `skills`, `contact`, `resume`, history and Tab completion)
+- **Strict security headers** (CSP without `unsafe-inline`, HSTS, Permissions Policy) in `vercel.json`
+- Self hosted fonts, Vercel Web Analytics, Open Graph card, sitemap
 
-### Technologies
-- HTML5/CSS3
-- Vanilla JavaScript
-- GitHub API
-- CSS Grid/Flexbox
-- CSS Animations
-
-### Performance
-- 95+ Lighthouse Score
-- Mobile Optimized
-- Fast Loading (<2s)
-- Accessibility Compliant
-
-## 📁 Project Structure
-```
-portfolio/
-├── Res.html          # Main portfolio page
-├── README.md         # Project documentation
-├── .gitignore        # Git ignore rules
-└── vercel.json       # Vercel configuration
+## Run it
+```bash
+npm install
+npm run dev       # local dev server
+npm run build     # type check + production build to dist/
+npm run preview   # serve the production build
 ```
 
-## 🛠 Local Development
-1. Clone the repository
-2. Open `Res.html` in your browser
-3. No build process required - pure HTML/CSS/JS
+## Structure
+```
+src/
+  data/        all site content (keep in sync with public/resume/*.pdf)
+  ui/          section components (Hero, Experience, Projects, About, Terminal, Contact, Navigation)
+  scene/       Three.js scene, camera zoom, resize handling
+  computer/    3D computer model, CRT shader, screen renderer
+  terminal/    shell, virtual file system, commands, history
+  styles/      design tokens and section styles
+  utils/       escaping, reveal on scroll, clipboard helpers
+public/        resume PDF, OG image, favicon, robots.txt, sitemap.xml
+```
 
-## 📞 Contact
-- **Email**: muddinal@uoguelph.ca
-- **LinkedIn**: [Your LinkedIn]
-- **GitHub**: [Your GitHub]
-
----
-Made with ❤️ by Rajin Al Faiz
+See `CLAUDE.md` for the rules any contributor (human or AI) must follow.

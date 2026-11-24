@@ -17,27 +17,22 @@ export interface FSDir {
 
 const aboutContent = `# Rajin Uddin
 
-I build things that work and look good doing it.
+${personal.pitch}
 
-From Dhaka to Guelph, I've spent the last few years turning coffee and curiosity into production
-systems that move real numbers. 3rd-year Computer Science student at the University of Guelph,
-minor in Project Management, graduating May 2027.
+4th year Computer Science student at the University of Guelph, minor in
+Project Management, graduating May 2027. Grew up in Dhaka, now building
+in Guelph and Waterloo Region.
 
-Right now I lead development at MapleKey Media — sole dev on a full-stack platform that replaced
-an entire manual intake process and guarantees 24-hour turnaround at scale. Before that, 15+ web
-apps shipped at PixelPro Analytics. Before that, a summer in Dhaka shaving 57% off page load
-times.
+Now: Lead Software Developer at MapleKey Media. I run engineering for the
+agency, from client sites and lead funnels to an AI lead scraping agent.
 
-I want to ship software that matters. If you're building it, let's talk.
+Next: ${personal.availability}.
 
 ## Education
 
-University of Guelph — Guelph, ON
-Honours Bachelor of Computing, Computer Science | Minor in Project Management
-Aug 2023 – May 2027
-
-Relevant: Data Structures & Algorithms, Operating Systems, Software Engineering,
-Database Systems, Computer Networks, Theory of Computation
+University of Guelph, Guelph ON
+Honours Bachelor of Computing, Computer Science
+Minor in Project Management, expected May 2027
 `
 
 const skillsContent = skills
@@ -50,7 +45,7 @@ Email:    ${personal.email}
 Phone:    ${personal.phone}
 GitHub:   ${personal.githubUrl}
 LinkedIn: ${personal.linkedinUrl}
-Resume:   https://${personal.domain}${personal.resumePath}
+Resume:   ${personal.siteUrl}${personal.resumePath}
 `
 
 function makeExperienceFile(e: typeof experience[0]): FSFile {
@@ -69,13 +64,7 @@ function makeProjectFile(p: typeof projects[0]): FSFile {
   return {
     type: 'file',
     name: p.slug + '.md',
-    content: `# ${p.name} — ${p.subtitle}
-${p.techStack.join(', ')} | ${p.year}
-
-${p.description}
-
-${p.impact}
-`,
+    content: `# ${p.name}: ${p.subtitle}\n${p.techStack.join(', ')} | ${p.year}\n\nRole: ${p.role}\n\nProblem: ${p.problem}\n\nBuilt: ${p.built}\n\nResult: ${p.result}\n`,
   }
 }
 

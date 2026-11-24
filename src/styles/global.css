@@ -1,19 +1,24 @@
-/* Design tokens */
+/* ============================================================
+   Design tokens
+   Palette rule: neutrals carry the content, peach is reserved for
+   things you can click, green only means "available".
+   ============================================================ */
 :root {
-  --color-peach: #ffcba4;
-  --color-peach-light: #fff0e5;
-  --color-peach-dark: #e8a87c;
-  --color-dark: #0a0a0a;
-  --color-surface: #111111;
-  --color-surface-2: #1a1a1a;
-  --color-text: #f5f5f5;
-  --color-subtle: #666666;
-  --color-border: rgba(255, 203, 164, 0.12);
+  --color-dark: #0b0a09;          /* warm black, page */
+  --color-surface: #14120f;       /* cards */
+  --color-surface-2: #1c1915;     /* raised */
+  --color-text: #ede8e3;          /* warm white, 16:1 on page */
+  --color-muted: #c4bdb6;         /* body copy, 10:1 on cards */
+  --color-subtle: #a8a29e;        /* metadata, 7.4:1 on cards (was #666, 3.3:1, failed WCAG) */
+  --color-line: rgba(237, 232, 227, 0.09);
+  --color-peach: #ffcba4;         /* actions only */
+  --color-peach-strong: #ffb98a;
+  --color-peach-dim: rgba(255, 203, 164, 0.14);
+  --color-available: #4ade80;
 
-  --font-terminal: 'JetBrains Mono', 'Courier New', monospace;
-  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  /* 8px spacing scale */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -25,141 +30,164 @@
   --space-24: 96px;
   --space-32: 128px;
 
-  /* Golden ratio type scale (1.618) base 16px */
-  --text-xs: clamp(0.64rem, 1vw, 0.75rem);
-  --text-sm: clamp(0.8rem, 1.2vw, 0.875rem);
-  --text-base: clamp(1rem, 1.5vw, 1rem);
-  --text-lg: clamp(1.1rem, 1.8vw, 1.25rem);
-  --text-xl: clamp(1.3rem, 2.5vw, 1.618rem);
-  --text-2xl: clamp(1.6rem, 3vw, 2.618rem);
-  --text-3xl: clamp(2rem, 4vw, 4.236rem);
-  --text-4xl: clamp(2.5rem, 6vw, 6.854rem);
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.5rem, 2.4vw, 1.875rem);
+  --text-2xl: clamp(1.875rem, 3.6vw, 2.75rem);
+  --text-hero: clamp(2.75rem, 7vw, 5.5rem);
 
-  --ease: cubic-bezier(0.25, 0.1, 0.25, 1.0);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
-  --duration-fast: 150ms;
-  --duration-base: 300ms;
-  --duration-slow: 600ms;
-  --duration-scroll: 800ms;
+  --radius: 10px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 220ms;
+  --content: 1080px;
+  --nav-h: 64px;
 }
 
-/* Universal reset */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
-  font-size: 16px;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: 1.65;
   background: var(--color-dark);
   color: var(--color-text);
-  line-height: 1.6;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Extra height for scroll-driven camera animation */
-  min-height: 400vh;
+  overflow-x: hidden;
 }
 
-/* THREE.js canvas — sits behind all HTML overlay content */
-canvas {
-  position: fixed !important;
-  top: 0;
-  left: 0;
+img, svg { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+::selection { background: var(--color-peach); color: var(--color-dark); }
+
+/* One visible, consistent focus ring everywhere (keyboard users only) */
+:focus-visible {
+  outline: 2px solid var(--color-peach);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 300;
+  padding: 10px 16px;
+  background: var(--color-peach);
+  color: var(--color-dark);
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform var(--duration) var(--ease-out);
+}
+.skip-link:focus { transform: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* THREE.js canvas sits behind everything and fades in once the first frame is drawn */
+.scene-canvas {
+  position: fixed;
+  inset: 0;
   width: 100% !important;
   height: 100% !important;
   z-index: 0;
-  display: block;
+  opacity: 0;
+  transition: opacity 900ms ease;
 }
+.scene-ready .scene-canvas { opacity: 1; }
+.no-3d .scene-canvas { display: none; }
 
-/* Hero spacer — scroll range for camera zoom */
-#hero-spacer {
-  height: 200vh;
-  pointer-events: none;
-}
-
-/* Main content sections float above the canvas */
 #main-content {
   position: relative;
   z-index: 10;
   background: var(--color-dark);
-  border-top: 1px solid var(--color-border);
+  outline: none;
 }
 
-/* Utility: screen-reader only */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+.noscript { padding: 120px 24px; max-width: 640px; margin: 0 auto; }
+.noscript a { color: var(--color-peach); }
 
-/* Utility: section layout */
-.section-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: var(--space-24) var(--space-8);
-}
-
-.section-title {
-  font-family: var(--font-terminal);
-  font-size: var(--text-sm);
-  color: var(--color-peach);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: var(--space-12);
-}
-
-.section-title::before {
-  content: '// ';
-  color: var(--color-subtle);
-}
-
-/* Buttons */
-.btn-primary {
+/* ---------- Buttons: one primary per view, clear hierarchy ---------- */
+.btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-6);
-  background: transparent;
-  border: 1px solid var(--color-peach);
-  color: var(--color-peach);
-  font-family: var(--font-terminal);
+  min-height: 48px;                 /* Fitts: big, easy targets */
+  padding: 0 var(--space-6);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: var(--font-ui);
   font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
   text-decoration: none;
   cursor: pointer;
-  transition: background var(--duration-base) var(--ease),
-              color var(--duration-base) var(--ease);
+  background: none;
+  transition: background var(--duration) ease, color var(--duration) ease,
+              border-color var(--duration) ease, transform var(--duration) var(--ease-out);
+}
+.btn:active { transform: translateY(1px) scale(0.99); }
+
+.btn--primary { background: var(--color-peach); color: var(--color-dark); }
+.btn--primary:hover { background: var(--color-peach-strong); }
+
+.btn--secondary { border-color: rgba(255, 203, 164, 0.55); color: var(--color-peach); }
+.btn--secondary:hover { background: var(--color-peach-dim); border-color: var(--color-peach); }
+
+.btn--ghost { color: var(--color-muted); }
+.btn--ghost:hover { color: var(--color-text); background: rgba(237, 232, 227, 0.06); }
+
+.btn--sm { min-height: 38px; padding: 0 var(--space-4); font-size: var(--text-xs); }
+.btn--lg { min-height: 56px; padding: 0 var(--space-8); font-size: var(--text-base); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  color: var(--color-subtle);
+  vertical-align: middle;
+}
+.badge--live { color: var(--color-available); border-color: rgba(74, 222, 128, 0.35); }
+
+/* Scroll reveal, only when motion is welcome */
+.reveal { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
 }
 
-.btn-primary:hover {
-  background: var(--color-peach);
-  color: var(--color-dark);
-}
-
-/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
   }
 }

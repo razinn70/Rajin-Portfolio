@@ -190,7 +190,7 @@ Every TypeScript source file has a corresponding compiled .js file committed to 
 
 **FINDING S-10: Hardcoded Admin Credentials Reference**
 
-Previous portfolio iterations included hardcoded admin panel credentials (username: rajin_dev, password: UofG2025!). The current codebase does not include this, but any future admin panel must use environment variables, not hardcoded strings.
+Previous portfolio iterations included hardcoded admin panel credentials (redacted; never commit credentials). The current codebase does not include this, but any future admin panel must use environment variables, not hardcoded strings.
 
 **Remediation:** If admin analytics dashboard is added (post-MVP), use Vercel environment variables + edge middleware for authentication. Never commit credentials to source.
 

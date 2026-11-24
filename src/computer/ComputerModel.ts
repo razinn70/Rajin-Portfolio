@@ -54,7 +54,8 @@ export class ComputerModel {
       screenGeo,
       new THREE.MeshBasicMaterial({ color: 0x050a0a })
     )
-    this.screenMesh.position.set(0, 0.4, 0.166)
+    // Must sit in front of the bezel's front face (0.16 + 0.0125). At 0.166 it was buried inside the bezel and never visible.
+    this.screenMesh.position.set(0, 0.4, 0.176)
     this.group.add(this.screenMesh)
 
     // --- Monitor neck / stand ---

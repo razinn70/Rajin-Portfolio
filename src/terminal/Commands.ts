@@ -1,5 +1,6 @@
 import type { FileSystem } from './FileSystem'
 import { personal } from '@/data/personal'
+import { skills as skillData } from '@/data/skills'
 
 export interface CommandResult {
   output: string
@@ -61,23 +62,17 @@ export const commands: Record<string, CommandHandler> = {
   pwd: (_args, fs) => ok(fs.getCurrentPath()),
 
   whoami: () => ok([
-    personal.name,
+    `${personal.name}, ${personal.role}`,
     personal.tagline,
+    personal.availability,
     '',
     `Email: ${personal.email}`,
     `GitHub: ${personal.githubUrl}`,
   ].join('\n')),
 
-  skills: () => {
-    // Dynamic import to avoid circular deps — read from data directly
-    const lines = [
-      'Languages:  Python, Java, JavaScript, TypeScript, C, SQL, R, Rust',
-      'Frameworks: React, Node.js, Spring Boot, Flask, FastAPI, scikit-learn',
-      'Databases:  PostgreSQL, MariaDB, Supabase, Docker, GCP, Tableau',
-      'Concepts:   REST APIs, CI/CD, Agile, Scrum, A/B Testing, Serverless',
-    ]
-    return ok(lines.join('\n'))
-  },
+  skills: () => ok(
+    skillData.map(c => `${(c.category + ':').padEnd(17)}${c.skills.join(', ')}`).join('\n')
+  ),
 
   contact: () => ok([
     `Name:     ${personal.name}`,
@@ -85,7 +80,7 @@ export const commands: Record<string, CommandHandler> = {
     `Phone:    ${personal.phone}`,
     `GitHub:   ${personal.githubUrl}`,
     `LinkedIn: ${personal.linkedinUrl}`,
-    `Web:      https://${personal.domain}`,
+    `Web:      ${personal.siteUrl}`,
   ].join('\n')),
 
   open: (args) => {
@@ -97,13 +92,7 @@ export const commands: Record<string, CommandHandler> = {
     if (!target || !map[target]) {
       return err(`open: available targets: github, linkedin`)
     }
-    const a = document.createElement('a')
-    a.href = map[target]
-    a.target = '_blank'
-    a.rel = 'noopener noreferrer'
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
+    window.open(map[target], '_blank', 'noopener,noreferrer')
     return ok(`Opening ${map[target]}...`)
   },
 
