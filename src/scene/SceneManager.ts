@@ -13,7 +13,7 @@ export class SceneManager {
 
   constructor() {
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color(0x0b0a09)
+    this.scene.background = new THREE.Color(0x0b1013)
 
     this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 100)
     this.camera.position.set(0, 0.25, 5)

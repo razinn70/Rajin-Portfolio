@@ -1,19 +1,19 @@
 /* ============================================================
-   Design tokens
-   Palette rule: neutrals carry the content, peach is reserved for
-   things you can click, green only means "available".
+   Design tokens: basalt, bone and glacier blue
+   Palette rule: neutrals carry the content, glacier blue is reserved
+   for things you can click, green only means "available".
    ============================================================ */
 :root {
-  --color-dark: #0b0a09;          /* warm black, page */
-  --color-surface: #14120f;       /* cards */
-  --color-surface-2: #1c1915;     /* raised */
-  --color-text: #ede8e3;          /* warm white, 16:1 on page */
-  --color-muted: #c4bdb6;         /* body copy, 10:1 on cards */
-  --color-subtle: #a8a29e;        /* metadata, 7.4:1 on cards (was #666, 3.3:1, failed WCAG) */
-  --color-line: rgba(237, 232, 227, 0.09);
-  --color-peach: #ffcba4;         /* actions only */
-  --color-peach-strong: #ffb98a;
-  --color-peach-dim: rgba(255, 203, 164, 0.14);
+  --color-dark: #0b1013;          /* black basalt, page */
+  --color-surface: #121a1f;       /* cards */
+  --color-surface-2: #18232a;     /* raised */
+  --color-text: #e8f3f6;          /* bone, 16.9:1 on page */
+  --color-muted: #b9c8ce;         /* body copy, 10.2:1 on cards */
+  --color-subtle: #8fa3ab;        /* metadata, 6.7:1 on cards */
+  --color-line: rgba(232, 243, 246, 0.09);
+  --color-accent: #1ba6cd;        /* glacier blue, actions only, 6.7:1 on page */
+  --color-accent-strong: #3dbbdd; /* hover */
+  --color-accent-dim: rgba(27, 166, 205, 0.14);
   --color-available: #4ade80;
 
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -69,11 +69,11 @@ ul, ol { list-style: none; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
 
-::selection { background: var(--color-peach); color: var(--color-dark); }
+::selection { background: var(--color-accent); color: var(--color-dark); }
 
 /* One visible, consistent focus ring everywhere (keyboard users only) */
 :focus-visible {
-  outline: 2px solid var(--color-peach);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -84,7 +84,7 @@ button { font: inherit; color: inherit; }
   left: 12px;
   z-index: 300;
   padding: 10px 16px;
-  background: var(--color-peach);
+  background: var(--color-accent);
   color: var(--color-dark);
   font-weight: 600;
   border-radius: 6px;
@@ -120,7 +120,7 @@ button { font: inherit; color: inherit; }
 }
 
 .noscript { padding: 120px 24px; max-width: 640px; margin: 0 auto; }
-.noscript a { color: var(--color-peach); }
+.noscript a { color: var(--color-accent); }
 
 /* ---------- Buttons: one primary per view, clear hierarchy ---------- */
 .btn {
@@ -144,14 +144,14 @@ button { font: inherit; color: inherit; }
 }
 .btn:active { transform: translateY(1px) scale(0.99); }
 
-.btn--primary { background: var(--color-peach); color: var(--color-dark); }
-.btn--primary:hover { background: var(--color-peach-strong); }
+.btn--primary { background: var(--color-accent); color: var(--color-dark); }
+.btn--primary:hover { background: var(--color-accent-strong); }
 
-.btn--secondary { border-color: rgba(255, 203, 164, 0.55); color: var(--color-peach); }
-.btn--secondary:hover { background: var(--color-peach-dim); border-color: var(--color-peach); }
+.btn--secondary { border-color: rgba(27, 166, 205, 0.55); color: var(--color-accent); }
+.btn--secondary:hover { background: var(--color-accent-dim); border-color: var(--color-accent); }
 
 .btn--ghost { color: var(--color-muted); }
-.btn--ghost:hover { color: var(--color-text); background: rgba(237, 232, 227, 0.06); }
+.btn--ghost:hover { color: var(--color-text); background: rgba(232, 243, 246, 0.06); }
 
 .btn--sm { min-height: 38px; padding: 0 var(--space-4); font-size: var(--text-xs); }
 .btn--lg { min-height: 56px; padding: 0 var(--space-8); font-size: var(--text-base); }

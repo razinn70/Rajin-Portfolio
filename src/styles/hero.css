@@ -67,7 +67,7 @@
   color: var(--color-subtle);
   margin-bottom: var(--space-6);
 }
-.hero__role-sep { color: var(--color-peach); margin: 0 4px; }
+.hero__role-sep { color: var(--color-accent); margin: 0 4px; }
 
 .hero__pitch {
   font-size: var(--text-xl);
@@ -110,11 +110,11 @@
   letter-spacing: 0.08em;
 }
 .has-3d .hero__scroll-hint { display: block; }
-.hero__scroll-hint::after { content: ' \2193'; color: var(--color-peach); }
+.hero__scroll-hint::after { content: ' \2193'; color: var(--color-accent); }
 
 /* Keep the copy readable when it sits over the 3D scene */
 .has-3d .hero__content {
-  text-shadow: 0 1px 24px rgba(11, 10, 9, 0.9);
+  text-shadow: 0 1px 24px rgba(11, 16, 19, 0.9);
 }
 
 @media (max-width: 640px) {

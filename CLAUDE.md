@@ -22,7 +22,8 @@ Every change must make one of these faster: knowing who Rajin is, believing the 
 5. Text contrast must pass WCAG AA. Use the tokens in `src/styles/global.css`, never raw hex in components.
 
 ## Design system
-- Neutrals carry content. Peach (`--color-peach`) is only for things you can click. Green (`--color-available`) only means "available for hire".
+- Palette: black basalt `#0B1013` background, bone `#E8F3F6` text, glacier blue `#1BA6CD` accent.
+- Neutrals carry content. Glacier blue (`--color-accent`) is only for things you can click. Green (`--color-available`) only means "available for hire".
 - One filled primary button per screen. Secondary is outlined, tertiary is ghost.
 - Touch targets at least 44px. Body text 17px. Measure under 70ch.
 - Section order follows what recruiters scan first: hero, experience, projects, about, terminal, contact.

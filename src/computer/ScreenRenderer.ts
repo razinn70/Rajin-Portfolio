@@ -10,11 +10,11 @@ const PADDING = 40
 const CURSOR_W = 14
 const MAX_LINES = Math.floor((CANVAS_H - PADDING * 2) / LINE_HEIGHT)
 
-const COLOR_BG = '#050f0a'
-const COLOR_TEXT = '#c8ffc8'
-const COLOR_DIM = '#5a8a5a'
-const COLOR_PROMPT = '#ffcba4'
-const COLOR_CURSOR = '#ffcba4'
+const COLOR_BG = '#050c10'
+const COLOR_TEXT = '#d4eef5'
+const COLOR_DIM = '#5f8794'
+const COLOR_PROMPT = '#3dbbdd'
+const COLOR_CURSOR = '#3dbbdd'
 
 const BOOT_LINES = [
   'RU-BIOS 2.0  rajin@portfolio',
@@ -165,9 +165,9 @@ export class ScreenRenderer {
     ctx.fillStyle = COLOR_BG
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H)
 
-    // Subtle green gradient overlay (CRT phosphor warmth)
+    // Subtle glacier blue gradient overlay (CRT phosphor glow)
     const grad = ctx.createLinearGradient(0, 0, 0, CANVAS_H)
-    grad.addColorStop(0, 'rgba(0,255,128,0.04)')
+    grad.addColorStop(0, 'rgba(27,166,205,0.06)')
     grad.addColorStop(1, 'rgba(0,0,0,0)')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H)

@@ -11,25 +11,25 @@ export class ComputerModel {
 
     // --- Materials ---
     const darkPlastic = new THREE.MeshStandardMaterial({
-      color: 0x1c1c1c,
+      color: 0x1a2328,
       roughness: 0.75,
       metalness: 0.05,
     })
 
     const bezelMat = new THREE.MeshStandardMaterial({
-      color: 0x242424,
+      color: 0x202b31,
       roughness: 0.7,
       metalness: 0.05,
     })
 
     const keyboardMat = new THREE.MeshStandardMaterial({
-      color: 0x202020,
+      color: 0x1c252a,
       roughness: 0.8,
       metalness: 0.0,
     })
 
     const keyMat = new THREE.MeshStandardMaterial({
-      color: 0x2a2a2a,
+      color: 0x26323a,
       roughness: 0.9,
       metalness: 0.0,
     })
@@ -113,20 +113,20 @@ export class ComputerModel {
     this.group.add(divider)
 
     // --- Lighting ---
-    const ambientLight = new THREE.AmbientLight(0xfff0e5, 0.5)
+    const ambientLight = new THREE.AmbientLight(0xe8f3f6, 0.45)
     scene.add(ambientLight)
 
-    const keyLight = new THREE.PointLight(0xffcba4, 60, 15)
+    const keyLight = new THREE.PointLight(0xe8f3f6, 55, 15)
     keyLight.position.set(-2, 3, 4)
     keyLight.castShadow = true
     scene.add(keyLight)
 
-    const fillLight = new THREE.PointLight(0xffffff, 10, 10)
+    const fillLight = new THREE.PointLight(0x1ba6cd, 10, 10)
     fillLight.position.set(2, 1, 3)
     scene.add(fillLight)
 
-    // Screen glow — soft peach emanating from the monitor
-    const screenGlow = new THREE.PointLight(0xffcba4, 5, 2)
+    // Screen glow: soft glacier blue spilling from the monitor
+    const screenGlow = new THREE.PointLight(0x1ba6cd, 2, 1.5)
     screenGlow.position.set(0, 0.4, 0.5)
     this.group.add(screenGlow)
   }
